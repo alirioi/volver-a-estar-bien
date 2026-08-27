@@ -39,9 +39,6 @@ const IFRAME_SRC = "https://player-vz-85291b1d-8d8.tv.pandavideo.com/embed/?v=91
 
 <script define:vars={{ PLAYER_ID, IFRAME_SRC }}>
   (function () {
-    // Si estamos en pantallas móviles (<= 768px), se desactiva el player para ahorrar pantalla/datos
-    if (window.innerWidth <= 768) return;
-
     const poster = document.getElementById('vslPoster');
     const frame = document.getElementById('vslFrame');
     const iframe = document.getElementById(PLAYER_ID);
@@ -56,7 +53,38 @@ const IFRAME_SRC = "https://player-vz-85291b1d-8d8.tv.pandavideo.com/embed/?v=91
         setTimeout(() => {
           if (poster && poster.parentNode) poster.remove();
         }, 500);
+
+        // Inicializar PiP (Picture in Picture) solo en escritorio (> 768px)
+        initPiP();
       }, { once: true });
+    }
+
+    function initPiP() {
+      // Cancelar ejecución del motor PiP en móviles (<= 768px) para no tapar la pantalla
+      if (window.innerWidth <= 768) return;
+
+      if (!document.querySelector('script[src="https://player.pandavideo.com.br/api.v2.js"]')) {
+        const s = document.createElement('script');
+        s.src = 'https://player.pandavideo.com.br/api.v2.js';
+        s.async = true;
+        s.onload = attachPiP;
+        document.head.appendChild(s);
+      } else {
+        attachPiP();
+      }
+    }
+
+    function attachPiP() {
+      window.pandascripttag = window.pandascripttag || [];
+      window.pandascripttag.push(function () {
+        if (typeof PandaPlayer !== 'undefined') {
+          const p = new PandaPlayer(PLAYER_ID, {
+            onReady() {
+              p.pipScrollFollow({ panda_id_player: PLAYER_ID });
+            }
+          });
+        }
+      });
     }
 
     if ('requestIdleCallback' in window) {
@@ -68,14 +96,6 @@ const IFRAME_SRC = "https://player-vz-85291b1d-8d8.tv.pandavideo.com/embed/?v=91
 </script>
 
 <style>
-  /* Oculta el video VSL y su banner en dispositivos móviles (<= 768px) */
-  @media (max-width: 768px) {
-    .video-vsl-container,
-    :global(.video-notice-banner) {
-      display: none !important;
-    }
-  }
-
   .video-vsl-container {
     position: relative;
     max-width: 880px;
