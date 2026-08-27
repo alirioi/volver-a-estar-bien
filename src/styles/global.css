@@ -1485,7 +1485,8 @@
         transition: opacity .6s ease, transform .6s ease
     }
 
-    .reveal.in {
+    .reveal.in,
+    .reveal.active {
         opacity: 1;
         transform: none
     }

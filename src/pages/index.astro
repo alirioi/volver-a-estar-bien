@@ -38,14 +38,15 @@ import '../styles/global.css';
 
 <script>
     // Intersection Observer global para animaciones .reveal
+    // NOTA: el CSS usa .reveal.in (no .active) para mostrar el elemento
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('active');
+                entry.target.classList.add('in');   // coincide con .reveal.in en global.css
                 observer.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.05 });  // umbral más bajo para activar antes en pantallas pequeñas
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>

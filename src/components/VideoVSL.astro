@@ -109,7 +109,9 @@ const IFRAME_SRC = "https://player-vz-85291b1d-8d8.tv.pandavideo.com/embed/?v=91
   .vsl-wrapper {
     position: relative;
     width: 100%;
-    aspect-ratio: 16 / 9;
+    padding-bottom: 56.25%; /* Fallback 16:9 compatible con iOS Safari */
+    height: 0;
+    overflow: hidden;
   }
 
   .vsl-poster {
