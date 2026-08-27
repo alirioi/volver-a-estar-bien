@@ -1,0 +1,42 @@
+---
+import { Image } from 'astro:assets';
+import mockup from '../assets/images/mockup.webp';
+---
+
+<div class="exit-overlay" id="exitOverlay" role="dialog" aria-modal="true" aria-labelledby="exitTitle">
+    <div class="exit-modal">
+        <button class="exit-close" id="exitClose" aria-label="Cerrar">×</button>
+        <Image class="exit-mockup" src={mockup} alt="Mockup del taller Volver a Estar Bien" width={520} format="webp" loading="lazy" />
+        <div class="exit-tag">Esperaaaa no te vayas con las manos vacías</div>
+        <h3 id="exitTitle">¿Todavía tienes dudas si este taller es para ti?</h3>
+        <p>Pruébalo por 7 días completos. Si no transforma la forma en que se comunican, te devuelvo el 100% de tu dinero inmediatamente.</p>
+        <a class="exit-btn" href="https://pay.hotmart.com/E98297746K?checkoutMode=10" target="_blank" rel="noopener noreferrer">
+            PROBAR POR $17 Y ACCEDER AHORA →
+        </a>
+    </div>
+</div>
+
+<script>
+    let exitShown = false;
+    const exitOverlay = document.getElementById('exitOverlay');
+    const exitClose = document.getElementById('exitClose');
+
+    function showExit() {
+        if (exitShown || !exitOverlay) return;
+        exitShown = true;
+        exitOverlay.classList.add('open');
+    }
+
+    document.addEventListener('mouseleave', (e) => {
+        if (e.clientY <= 10) showExit();
+    });
+
+    if (exitClose && exitOverlay) {
+        exitClose.addEventListener('click', () => {
+            exitOverlay.classList.remove('open');
+        });
+        exitOverlay.addEventListener('click', (e) => {
+            if (e.target === exitOverlay) exitOverlay.classList.remove('open');
+        });
+    }
+</script>

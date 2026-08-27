@@ -1,0 +1,75 @@
+---
+import { Image } from 'astro:assets';
+import povImage from '../assets/images/POV_viendo-el-curso_2x.webp';
+import modulo1 from '../assets/images/modulo1.webp';
+import modulo2 from '../assets/images/modulo2.webp';
+import modulo3 from '../assets/images/modulo3.webp';
+import modulo4 from '../assets/images/modulo4.webp';
+import modulo5 from '../assets/images/modulo5.webp';
+
+const stepsData = [
+  {
+    num: "PASO 1",
+    img: modulo1,
+    title: "Módulo 1: Pausa estratégica (Detén la tormenta)",
+    desc: "Cómo congelar el conflicto en los primeros 30 segundos sin sonar a evasiva ni generar más rabia."
+  },
+  {
+    num: "PASO 2",
+    img: modulo2,
+    title: "Módulo 2: Decodificación emocional (Lee lo que no te dice)",
+    desc: "Aprende a escuchar la necesidad oculta detrás del grito, la queja o el sarcasmo de tu pareja."
+  },
+  {
+    num: "PASO 3",
+    img: modulo3,
+    title: "Módulo 3: El Puente Verbal (Habla sin atacar)",
+    desc: "Frases exactas para expresar tu molestia sin activar las defensas del otro."
+  },
+  {
+    num: "PASO 4",
+    img: modulo4,
+    title: "Módulo 4: Negociación limpia (Lleguen a acuerdos)",
+    desc: "El paso a paso para pasar de las recriminaciones a acuerdos concretos y cumplibles."
+  },
+  {
+    num: "PASO 5",
+    img: modulo5,
+    title: "Módulo 5: Cierre de paz (Reconexión inmediata)",
+    desc: "Cómo cerrar la conversación dejando una sensación de alivio y cercanía en lugar de distancia."
+  }
+];
+---
+
+<section class="steps">
+    <div class="wrap">
+        <div class="intro reveal">
+            <span class="eyebrow">¿Qué es este taller?</span>
+            <h2 style="margin-top:20px">Un protocolo para el momento exacto en que la conversación se calienta</h2>
+            <p>Un taller online práctico donde aprendes el Método del Traductor Emocional en 5 pasos. No es teoría para leer en calma: es un protocolo de comunicación efectiva para el momento exacto en que la conversación se calienta. Lo aplicas tú, sin convencer a tu pareja de nada.</p>
+            <div class="ornament" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.125em; margin-right:4px;">
+                    <path d="M12 3c.132 5.813 4.417 10.155 10 10-5.583 0-9.868 4.187-10 10-1.104-5.813-5.388-10.155-10-10 5.583 0 9.868-4.187 10-10z" />
+                </svg>
+            </div>
+        </div>
+        <div class="steps-layout">
+            <figure class="material-fig reveal">
+                <span class="tag">Así se ve por dentro</span>
+                <span class="material-card">
+                    <Image src={povImage} alt="Interfaz del reproductor digital con la mentora Yaner Rodríguez" width={720} height={1045} format="webp" loading="lazy" />
+                </span>
+            </figure>
+            <div class="step-grid">
+                {stepsData.map((step) => (
+                    <div class="step reveal">
+                        <span class="num">{step.num}</span>
+                        <Image src={step.img} alt={step.title} width={400} format="webp" loading="lazy" />
+                        <h3>{step.title}</h3>
+                        <p>{step.desc}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </div>
+</section>

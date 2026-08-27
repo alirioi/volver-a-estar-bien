@@ -1,0 +1,20 @@
+---
+---
+<div class="sticky-cta" id="stickyCta">
+    <div class="p"><span class="o">$127 USD</span><span class="n">$17 USD</span></div>
+    <a class="cta-btn" href="https://pay.hotmart.com/E98297746K?checkoutMode=10" target="_blank" rel="noopener noreferrer">
+        Quiero estar bien →
+    </a>
+</div>
+
+<script>
+    const sticky = document.getElementById('stickyCta');
+    const hero = document.querySelector('.hero');
+    if (sticky && hero) {
+        window.addEventListener('scroll', () => {
+            const past = window.scrollY > (hero as HTMLElement).offsetHeight - 100;
+            sticky.classList.toggle('show', past);
+            sticky.setAttribute('aria-hidden', String(!past));
+        }, { passive: true });
+    }
+</script>

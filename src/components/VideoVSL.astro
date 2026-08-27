@@ -1,0 +1,140 @@
+---
+import { Image } from 'astro:assets';
+import posterImg from '../assets/images/minitura vsl1.webp';
+
+const PLAYER_ID = "panda-918952d5-fcb0-4b6a-af00-c836ba1eadf7";
+const IFRAME_SRC = "https://player-vz-85291b1d-8d8.tv.pandavideo.com/embed/?v=918952d5-fcb0-4b6a-af00-c836ba1eadf7&autoplay=1";
+---
+
+<div class="video-vsl-container" id="videoVslContainer">
+  <div class="vsl-wrapper" id="vslWrapper">
+    <!-- POSTER: LCP candidate (minitura vsl1.webp) -->
+    <div class="vsl-poster" id="vslPoster">
+      <Image
+        src={posterImg}
+        alt="Workshop Volver a Estar Bien — Video VSL"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        class="vsl-poster-img"
+        width={880}
+      />
+      <div class="vsl-loading-ring" id="vslSpinner" aria-hidden="true"></div>
+    </div>
+
+    <!-- IFRAME: Inyectado vía JS para autoplay diferido -->
+    <div class="vsl-frame" id="vslFrame" aria-hidden="true">
+      <iframe
+        id={PLAYER_ID}
+        title="Video VSL Workshop Volver a Estar Bien"
+        style="border:none;"
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+        allowfullscreen
+        width="100%"
+        height="100%"
+      ></iframe>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ PLAYER_ID, IFRAME_SRC }}>
+  (function () {
+    // Si estamos en pantallas móviles (<= 768px), se desactiva el player para ahorrar pantalla/datos
+    if (window.innerWidth <= 768) return;
+
+    const poster = document.getElementById('vslPoster');
+    const frame = document.getElementById('vslFrame');
+    const iframe = document.getElementById(PLAYER_ID);
+
+    function injectVideo() {
+      if (!iframe || iframe.src) return;
+      iframe.src = IFRAME_SRC;
+
+      iframe.addEventListener('load', () => {
+        if (poster) poster.classList.add('vsl-poster--hidden');
+        if (frame) frame.removeAttribute('aria-hidden');
+        setTimeout(() => {
+          if (poster && poster.parentNode) poster.remove();
+        }, 500);
+      }, { once: true });
+    }
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(injectVideo, { timeout: 400 });
+    } else {
+      setTimeout(injectVideo, 300);
+    }
+  })();
+</script>
+
+<style>
+  /* Oculta el video VSL y su banner en dispositivos móviles (<= 768px) */
+  @media (max-width: 768px) {
+    .video-vsl-container,
+    :global(.video-notice-banner) {
+      display: none !important;
+    }
+  }
+
+  .video-vsl-container {
+    position: relative;
+    max-width: 880px;
+    margin: 0 auto 30px;
+    border-radius: 0 0 16px 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px -15px rgba(62, 29, 117, 0.4);
+    background: #1f1b37;
+  }
+
+  .vsl-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+
+  .vsl-poster {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: #1f1b37;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+  }
+
+  .vsl-poster--hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .vsl-poster-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .vsl-loading-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: vsl-spin 0.8s linear infinite;
+  }
+
+  @keyframes vsl-spin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  .vsl-frame {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+  }
+</style>

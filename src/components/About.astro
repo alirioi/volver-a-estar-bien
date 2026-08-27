@@ -1,0 +1,54 @@
+---
+import { Image } from 'astro:assets';
+import yanerProfile from '../assets/images/yaner-profile.webp';
+---
+<section class="about">
+    <div class="wrap">
+        <div class="about-card reveal">
+            <Image
+                class="about-photo"
+                src={yanerProfile}
+                alt="Yaner Rodríguez, coach de comunicación en pareja"
+                width={220}
+                format="webp"
+                loading="lazy"
+            />
+            <div class="name">Yaner Rodríguez</div>
+            <div class="role">Coach de comunicación en pareja</div>
+            <p style="margin-top: 22px; font-size: 0.95rem; color: #4a4462; line-height: 1.6; text-align: center; padding: 16px; background: rgba(210,200,255,0.2); border-radius: 14px;">
+                Con <strong style="color:var(--morado); font-family:var(--display); font-size:1.1rem;">35 años</strong> de matrimonio y <strong style="color:var(--morado); font-family:var(--display); font-size:1.1rem;">15 años</strong> ayudando a parejas, sumo mi experiencia vital a mi formación en <strong>Enfermería y Salud Pública</strong>.
+            </p>
+        </div>
+        <div class="about-text">
+            <h2>Llevo 35 años casada. No fue suerte: fue aprender a comunicarnos.</h2>
+            <p style="margin-top:20px">Soy Yaner Rodríguez, coach de comunicación en pareja.</p>
+            <p>Tengo 56 años y llevo 35 casada con el mismo hombre. Y seré directa contigo: no me tocó un matrimonio fácil.</p>
+            <p>Hubo años en que mi casa fue un campo de batalla disfrazado de hogar, con mis hijos presenciando gritos hasta por lo más sencillo.</p>
+            <p>Lo intenté todo: hablar "con calma", callarme, ceder, explotar.</p>
+            <p>Busqué terapia psicológica, psiquiatras, consejeros de matrimonio, sacerdotes, retiros espirituales, libros, oración y lágrimas.</p>
+            <p><strong>Nada me daba la paz de mi hogar.</strong> Volvíamos a chocar por lo mismo, una y otra vez.</p>
+            <div class="key">Hasta que identifiqué lo que lo cambió todo: <strong>el problema nunca fue el tema.</strong> Era CÓMO entrábamos a la conversación. Y eso podía cambiarlo yo, sin permiso de nadie.</div>
+            <p>Mi esposo nunca hizo un curso de comunicación y la dinámica entre los dos cambió cuando yo cambié la mía.</p>
+            <p>A esa experiencia le sumo mi formación: Licenciada en Enfermería, especialista en Salud Pública, y 15 años acompañando a cientos de parejas a construir una comunicación efectiva, basada en el respeto.</p>
+            <p>Este taller es todo ese aprendizaje, condensado en un método que funciona, <strong>para que no tardes 35 años en dominar lo que yo tuve que descubrir sola.</strong></p>
+            <div style="margin-top:34px; text-align:center;">
+                <p class="trial-close">¿Te imaginas que tu próxima conversación difícil termine en acuerdo y no en portazo?</p>
+                <div class="price-row">
+                    <span class="price-old">$127 USD</span>
+                    <span class="price-label">Hoy</span>
+                    <span class="price-now">$17 USD</span>
+                </div>
+                <a class="cta-btn" href="https://pay.hotmart.com/E98297746K?checkoutMode=10" target="_blank" rel="noopener noreferrer">
+                    Quiero volver a estar bien <span class="arrow">→</span>
+                </a>
+                <div class="trust-row">
+                    <span>
+                        <svg viewBox="0 0 24 24" width="1.1em" height="1.1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.125em; margin-right:4px;">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg> Si no te sirve, te devuelvo tu dinero
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

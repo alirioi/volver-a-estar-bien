@@ -1,0 +1,37 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Volver a Estar Bien — Taller de Comunicación en Pareja | Yaner Rodríguez",
+  description = "El Método del Traductor Emocional: el paso a paso de comunicación efectiva que una sola persona puede aplicar para transformar las peleas en acuerdos."
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+
+  <!-- Preconnect para Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400..800,50&family=Figtree:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- DNS prefetch & preconnect para PandaVideo -->
+  <link rel="dns-prefetch" href="https://player-vz-85291b1d-8d8.tv.pandavideo.com" />
+  <link rel="dns-prefetch" href="https://b-vz-85291b1d-8d8.tv.pandavideo.com.br" />
+  <link rel="preconnect" href="https://player-vz-85291b1d-8d8.tv.pandavideo.com" crossorigin />
+</head>
+<body>
+  <slot />
+</body>
+</html>
