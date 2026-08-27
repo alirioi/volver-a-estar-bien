@@ -8,7 +8,7 @@ const IFRAME_SRC = "https://player-vz-85291b1d-8d8.tv.pandavideo.com/embed/?v=91
 
 <div class="video-vsl-container" id="videoVslContainer">
   <div class="vsl-wrapper" id="vslWrapper">
-    <!-- POSTER: LCP candidate (minitura vsl1.webp) -->
+    <!-- POSTER: imagen responsive — sirve 400w en móvil, 880w en desktop -->
     <div class="vsl-poster" id="vslPoster">
       <Image
         src={posterImg}
@@ -17,6 +17,8 @@ const IFRAME_SRC = "https://player-vz-85291b1d-8d8.tv.pandavideo.com/embed/?v=91
         fetchpriority="high"
         decoding="async"
         class="vsl-poster-img"
+        widths={[400, 880]}
+        sizes="(max-width: 600px) 400px, 880px"
         width={880}
       />
       <div class="vsl-loading-ring" id="vslSpinner" aria-hidden="true"></div>
@@ -40,29 +42,31 @@ const IFRAME_SRC = "https://player-vz-85291b1d-8d8.tv.pandavideo.com/embed/?v=91
 <script define:vars={{ PLAYER_ID, IFRAME_SRC }}>
   (function () {
     const poster = document.getElementById('vslPoster');
-    const frame = document.getElementById('vslFrame');
+    const frame  = document.getElementById('vslFrame');
     const iframe = document.getElementById(PLAYER_ID);
+    const container = document.getElementById('videoVslContainer');
+    let injected = false;
 
     function injectVideo() {
-      if (!iframe || iframe.src) return;
+      if (injected || !iframe || iframe.src) return;
+      injected = true;
       iframe.src = IFRAME_SRC;
 
       iframe.addEventListener('load', () => {
         if (poster) poster.classList.add('vsl-poster--hidden');
-        if (frame) frame.removeAttribute('aria-hidden');
+        if (frame)  frame.removeAttribute('aria-hidden');
         setTimeout(() => {
           if (poster && poster.parentNode) poster.remove();
         }, 500);
 
-        // Inicializar PiP (Picture in Picture) solo en escritorio (> 768px)
-        initPiP();
+        // SDK de PiP SOLO en escritorio (> 768px) y SOLO cuando el iframe carga
+        if (window.innerWidth > 768) {
+          initPiP();
+        }
       }, { once: true });
     }
 
     function initPiP() {
-      // Cancelar ejecución del motor PiP en móviles (<= 768px) para no tapar la pantalla
-      if (window.innerWidth <= 768) return;
-
       if (!document.querySelector('script[src="https://player.pandavideo.com.br/api.v2.js"]')) {
         const s = document.createElement('script');
         s.src = 'https://player.pandavideo.com.br/api.v2.js';
@@ -87,10 +91,18 @@ const IFRAME_SRC = "https://player-vz-85291b1d-8d8.tv.pandavideo.com/embed/?v=91
       });
     }
 
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(injectVideo, { timeout: 400 });
+    // Inyectar video cuando el contenedor entra en el viewport (mejor que idle en móvil)
+    if ('IntersectionObserver' in window && container) {
+      const io = new IntersectionObserver((entries, obs) => {
+        if (entries[0].isIntersecting) {
+          injectVideo();
+          obs.disconnect();
+        }
+      }, { rootMargin: '200px' }); // precarga 200px antes de que sea visible
+      io.observe(container);
     } else {
-      setTimeout(injectVideo, 300);
+      // Fallback para browsers sin IntersectionObserver
+      setTimeout(injectVideo, 800);
     }
   })();
 </script>

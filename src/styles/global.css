@@ -55,7 +55,10 @@
     }
 
     section {
-        padding: 88px 0
+        padding: 88px 0;
+        /* Mejora el rendimiento de secciones below-fold en móvil */
+        content-visibility: auto;
+        contain-intrinsic-size: 0 500px;  /* evita layout shift al renderizar */
     }
 
     /* ─── Tipografía ─── */
@@ -1482,13 +1485,15 @@
     .reveal {
         opacity: 0;
         transform: translateY(22px);
-        transition: opacity .6s ease, transform .6s ease
+        transition: opacity .6s ease, transform .6s ease;
+        will-change: transform, opacity;  /* promueve a capa compositor --GPU-- */
     }
 
     .reveal.in,
     .reveal.active {
         opacity: 1;
-        transform: none
+        transform: none;
+        will-change: auto;  /* libera la capa una vez terminada la animación */
     }
 
     @media(prefers-reduced-motion:reduce) {

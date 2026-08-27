@@ -23,7 +23,7 @@ import bonus4 from '../assets/images/bonus4.webp';
         <div class="offer-box reveal">
             <div class="offer-head">
                 <h2>Todo lo que recibes hoy</h2>
-                <Image class="offer-mockup" src={mockup} alt="Material del taller Volver a Estar Bien" width={520} format="webp" loading="eager" />
+                <Image class="offer-mockup" src={mockup} alt="Material del taller Volver a Estar Bien" widths={[320, 520]} sizes="(max-width: 600px) 320px, 520px" width={520} format="webp" loading="lazy" decoding="async" />
             </div>
 
             <ul class="offer-list">
