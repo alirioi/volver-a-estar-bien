@@ -18,13 +18,26 @@ const {
   <title>{title}</title>
   <meta name="description" content={description} />
 
-  <!-- Preconnect para Google Fonts -->
+  <!-- Preconnect & Asynchronous Non-blocking Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
+    rel="preload"
+    as="style"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400..800,50&family=Figtree:wght@400;500;600;700&display=swap"
+  />
+  <link
     href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400..800,50&family=Figtree:wght@400;500;600;700&display=swap"
     rel="stylesheet"
+    media="print"
+    onload="this.media='all'"
   />
+  <noscript>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400..800,50&family=Figtree:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </noscript>
 
   <!-- DNS prefetch & preconnect para PandaVideo -->
   <link rel="dns-prefetch" href="https://player-vz-85291b1d-8d8.tv.pandavideo.com" />

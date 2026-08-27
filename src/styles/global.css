@@ -100,7 +100,7 @@
     .eyebrow-top {
         display: block;
         width: 100%;
-        background: #dc2626;
+        background: #b91c1c;
         color: #ffffff;
         text-align: center;
         padding: 12px 16px;
@@ -109,11 +109,11 @@
         letter-spacing: .08em;
         text-transform: uppercase;
         border-radius: 0;
-        box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+        box-shadow: 0 4px 12px rgba(185, 28, 28, 0.25);
     }
 
     .dark .eyebrow-top {
-        background: #dc2626;
+        background: #b91c1c;
         color: #ffffff;
     }
 
@@ -945,9 +945,10 @@
 
     footer {
         background: var(--tinta);
-        color: #8f88b0;
+        color: #d2c8ff;
         text-align: center;
-        font-size: .82rem;
+        font-size: .88rem;
+        line-height: 1.6;
         padding: 34px 24px 110px
     }
 

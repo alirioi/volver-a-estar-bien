@@ -5,19 +5,28 @@
         <span class="o" aria-label="Precio original $127 USD">$127 USD</span>
         <span class="n" aria-label="Precio de oferta $17 USD">$17 USD</span>
     </div>
-    <a class="cta-btn" href="https://pay.hotmart.com/E98297746K?checkoutMode=10" target="_blank" rel="noopener noreferrer" aria-label="Quiero estar bien - Inscribirse por $17 USD">
+    <a class="cta-btn" id="stickyCtaLink" href="https://pay.hotmart.com/E98297746K?checkoutMode=10" target="_blank" rel="noopener noreferrer" aria-label="Quiero estar bien - Inscribirse por $17 USD" tabindex="-1">
         Quiero estar bien <span class="arrow" aria-hidden="true">→</span>
     </a>
 </div>
 
 <script>
     const sticky = document.getElementById('stickyCta');
+    const stickyLink = document.getElementById('stickyCtaLink');
     const hero = document.querySelector('.hero');
     if (sticky && hero) {
-        window.addEventListener('scroll', () => {
+        const updateStickyState = () => {
             const past = window.scrollY > (hero as HTMLElement).offsetHeight - 100;
             sticky.classList.toggle('show', past);
-            sticky.setAttribute('aria-hidden', String(!past));
-        }, { passive: true });
+            if (past) {
+                sticky.removeAttribute('aria-hidden');
+                if (stickyLink) stickyLink.removeAttribute('tabindex');
+            } else {
+                sticky.setAttribute('aria-hidden', 'true');
+                if (stickyLink) stickyLink.setAttribute('tabindex', '-1');
+            }
+        };
+        window.addEventListener('scroll', updateStickyState, { passive: true });
+        updateStickyState();
     }
 </script>
