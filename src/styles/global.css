@@ -205,7 +205,7 @@
 
     .price-old {
         font-size: 1.15rem;
-        color: #8a83a8;
+        color: #595278;
         text-decoration: line-through
     }
 
@@ -238,7 +238,7 @@
 
     .cta-note {
         font-size: .85rem;
-        color: #6f6890;
+        color: #524b75;
         margin-top: 24px
     }
 
@@ -269,7 +269,8 @@
         color: var(--tinta)
     }
 
-    .hero h3 {
+    .hero h3,
+    .hero .hero-sub {
         margin-bottom: 80px;
     }
 
@@ -347,7 +348,7 @@
     }
 
     .t-before p {
-        color: #8a83a8;
+        color: #595278;
         text-decoration: line-through;
         text-decoration-color: rgba(176, 51, 143, .5)
     }
@@ -919,7 +920,7 @@
 
     .sticky-cta .p .o {
         font-size: .75rem;
-        color: #8a83a8;
+        color: #595278;
         text-decoration: line-through
     }
 
@@ -1089,7 +1090,7 @@
 
     .ts-meta {
         font-size: .78rem;
-        color: #8a83a8
+        color: #595278
     }
 
     .ts-body {
@@ -1102,7 +1103,7 @@
         gap: 18px;
         margin-top: 14px;
         font-size: .8rem;
-        color: #8a83a8;
+        color: #595278;
         font-weight: 600
     }
 
@@ -1174,7 +1175,7 @@
         font-family: var(--display);
         font-size: 1.3rem;
         font-weight: 700;
-        color: #8a83a8;
+        color: #595278;
         text-decoration: line-through
     }
 
@@ -1225,7 +1226,8 @@
         border: 1px solid rgba(217, 56, 56, .2);
     }
 
-    .exit-modal h3 {
+    .exit-modal h3,
+    .exit-modal .exit-title {
         font-size: 1.5rem;
         color: var(--morado);
         margin-bottom: 14px
@@ -1270,7 +1272,7 @@
         background: none;
         border: none;
         font-size: 1.6rem;
-        color: #8a83a8;
+        color: #595278;
         cursor: pointer;
         line-height: 1;
         padding: 6px;

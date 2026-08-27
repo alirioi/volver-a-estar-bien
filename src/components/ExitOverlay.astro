@@ -5,13 +5,13 @@ import mockup from '../assets/images/mockup.webp';
 
 <div class="exit-overlay" id="exitOverlay" role="dialog" aria-modal="true" aria-labelledby="exitTitle">
     <div class="exit-modal">
-        <button class="exit-close" id="exitClose" aria-label="Cerrar">×</button>
+        <button class="exit-close" id="exitClose" aria-label="Cerrar ventana emergente">×</button>
         <Image class="exit-mockup" src={mockup} alt="Mockup del taller Volver a Estar Bien" width={520} format="webp" loading="lazy" />
         <div class="exit-tag">Esperaaaa no te vayas con las manos vacías</div>
-        <h3 id="exitTitle">¿Todavía tienes dudas si este taller es para ti?</h3>
+        <h2 id="exitTitle" class="exit-title">¿Todavía tienes dudas si este taller es para ti?</h2>
         <p>Pruébalo por 7 días completos. Si no transforma la forma en que se comunican, te devuelvo el 100% de tu dinero inmediatamente.</p>
-        <a class="exit-btn" href="https://pay.hotmart.com/E98297746K?checkoutMode=10" target="_blank" rel="noopener noreferrer">
-            PROBAR POR $17 Y ACCEDER AHORA →
+        <a class="exit-btn" href="https://pay.hotmart.com/E98297746K?checkoutMode=10" target="_blank" rel="noopener noreferrer" aria-label="Probar por $17 USD y acceder ahora">
+            PROBAR POR $17 Y ACCEDER AHORA <span class="arrow" aria-hidden="true">→</span>
         </a>
     </div>
 </div>
