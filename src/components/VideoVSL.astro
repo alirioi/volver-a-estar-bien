@@ -2,8 +2,9 @@
 import { Image } from 'astro:assets';
 import posterImg from '../assets/images/minitura vsl1.webp';
 
-const PLAYER_ID = "panda-918952d5-fcb0-4b6a-af00-c836ba1eadf7";
-const IFRAME_SRC = "https://player-vz-85291b1d-8d8.tv.pandavideo.com/embed/?v=918952d5-fcb0-4b6a-af00-c836ba1eadf7&autoplay=1";
+const VIDEO_ID = "1209922173";
+const PLAYER_ID = `vimeo-player-${VIDEO_ID}`;
+const IFRAME_SRC = `https://player.vimeo.com/video/${VIDEO_ID}?autoplay=1&autopause=0&muted=0&responsive=1&dnt=1`;
 ---
 
 <div class="video-vsl-container" id="videoVslContainer">
@@ -24,7 +25,7 @@ const IFRAME_SRC = "https://player-vz-85291b1d-8d8.tv.pandavideo.com/embed/?v=91
       <div class="vsl-loading-ring" id="vslSpinner" aria-hidden="true"></div>
     </div>
 
-    <!-- IFRAME: Inyectado vía JS para autoplay diferido -->
+    <!-- IFRAME: Inyectado vía JS para autoplay diferido y Vimeo Embed -->
     <div class="vsl-frame" id="vslFrame">
       <iframe
         id={PLAYER_ID}
@@ -46,6 +47,7 @@ const IFRAME_SRC = "https://player-vz-85291b1d-8d8.tv.pandavideo.com/embed/?v=91
     const iframe = document.getElementById(PLAYER_ID);
     const container = document.getElementById('videoVslContainer');
     let injected = false;
+    let isFloating = false;
 
     function injectVideo() {
       if (injected || !iframe || iframe.src) return;
@@ -59,49 +61,48 @@ const IFRAME_SRC = "https://player-vz-85291b1d-8d8.tv.pandavideo.com/embed/?v=91
           if (poster && poster.parentNode) poster.remove();
         }, 500);
 
-        // SDK de PiP SOLO en escritorio (> 768px) y SOLO cuando el iframe carga
+        // Activar comportamiento Sticky / PiP al hacer scroll en desktop
         if (window.innerWidth > 768) {
-          initPiP();
+          initScrollPiP();
         }
       }, { once: true });
     }
 
-    function initPiP() {
-      if (!document.querySelector('script[src="https://player.pandavideo.com.br/api.v2.js"]')) {
-        const s = document.createElement('script');
-        s.src = 'https://player.pandavideo.com.br/api.v2.js';
-        s.async = true;
-        s.onload = attachPiP;
-        document.head.appendChild(s);
-      } else {
-        attachPiP();
-      }
-    }
+    function initScrollPiP() {
+      if (!('IntersectionObserver' in window) || !container) return;
 
-    function attachPiP() {
-      window.pandascripttag = window.pandascripttag || [];
-      window.pandascripttag.push(function () {
-        if (typeof PandaPlayer !== 'undefined') {
-          const p = new PandaPlayer(PLAYER_ID, {
-            onReady() {
-              p.pipScrollFollow({ panda_id_player: PLAYER_ID });
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          // Si el contenedor original sale de la pantalla hacia arriba
+          if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
+            if (!isFloating) {
+              container.classList.add('vsl-floating-pip');
+              isFloating = true;
             }
-          });
-        }
+          } else if (entry.isIntersecting) {
+            if (isFloating) {
+              container.classList.remove('vsl-floating-pip');
+              isFloating = false;
+            }
+          }
+        });
+      }, {
+        threshold: 0.1
       });
+
+      observer.observe(container);
     }
 
-    // Inyectar video cuando el contenedor entra en el viewport (mejor que idle en móvil)
+    // Inyectar video cuando el contenedor entra en el viewport
     if ('IntersectionObserver' in window && container) {
       const io = new IntersectionObserver((entries, obs) => {
         if (entries[0].isIntersecting) {
           injectVideo();
           obs.disconnect();
         }
-      }, { rootMargin: '200px' }); // precarga 200px antes de que sea visible
+      }, { rootMargin: '200px' });
       io.observe(container);
     } else {
-      // Fallback para browsers sin IntersectionObserver
       setTimeout(injectVideo, 800);
     }
   })();
@@ -116,6 +117,7 @@ const IFRAME_SRC = "https://player-vz-85291b1d-8d8.tv.pandavideo.com/embed/?v=91
     overflow: hidden;
     box-shadow: 0 20px 50px -15px rgba(62, 29, 117, 0.4);
     background: #1f1b37;
+    transition: all 0.3s ease;
   }
 
   .vsl-wrapper {
@@ -170,5 +172,30 @@ const IFRAME_SRC = "https://player-vz-85291b1d-8d8.tv.pandavideo.com/embed/?v=91
     z-index: 1;
     width: 100%;
     height: 100%;
+  }
+
+  /* PiP Flotante inteligente al hacer scroll en desktop (reemplaza SDK de Panda) */
+  :global(.video-vsl-container.vsl-floating-pip) {
+    position: fixed !important;
+    bottom: 24px !important;
+    right: 24px !important;
+    width: 320px !important;
+    max-width: 90vw !important;
+    margin: 0 !important;
+    z-index: 9999 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.15) !important;
+    animation: vslSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes vslSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(30px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
 </style>
