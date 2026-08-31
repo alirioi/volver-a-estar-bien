@@ -62,17 +62,9 @@ const {
     />
   </noscript>
 
-  <!-- DNS prefetch & preconnect para PandaVideo — 4 orígenes críticos (320ms savings c/u) -->
-  <link rel="dns-prefetch" href="https://player-vz-85291b1d-8d8.tv.pandavideo.com" />
-  <link rel="dns-prefetch" href="https://b-vz-85291b1d-8d8.tv.pandavideo.com.br" />
-  <link rel="dns-prefetch" href="https://config.tv.pandavideo.com.br" />
-  <link rel="dns-prefetch" href="https://thumbs.tv.pandavideo.com.br" />
-  <link rel="dns-prefetch" href="https://cdn.pandavideo.com" />
-  <!-- preconnect sin crossorigin para solicitudes de navegación del iframe -->
-  <link rel="preconnect" href="https://player-vz-85291b1d-8d8.tv.pandavideo.com" />
-  <link rel="preconnect" href="https://b-vz-85291b1d-8d8.tv.pandavideo.com.br" />
-  <link rel="preconnect" href="https://config.tv.pandavideo.com.br" />
-  <link rel="preconnect" href="https://thumbs.tv.pandavideo.com.br" />
+  <!-- Preconnect para Vimeo —  embed + assets de video -->
+  <link rel="preconnect" href="https://player.vimeo.com" />
+  <link rel="dns-prefetch" href="https://f.vimeocdn.com" />
 </head>
 <body>
   <slot />
