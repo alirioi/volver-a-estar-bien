@@ -1,191 +1,154 @@
 ---
-import { Image } from 'astro:assets';
-import posterImg from '../assets/images/minitura vsl1.webp';
-
+// Embed oficial de Vimeo
 const VIDEO_ID = "1209922173";
-const PLAYER_ID = `vimeo-player-${VIDEO_ID}`;
-const IFRAME_SRC = `https://player.vimeo.com/video/${VIDEO_ID}?autoplay=1&autopause=0&muted=0&responsive=1&dnt=1`;
+const IFRAME_SRC = `https://player.vimeo.com/video/${VIDEO_ID}?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=1`;
 ---
 
-<div class="video-vsl-container" id="videoVslContainer">
-  <div class="vsl-wrapper" id="vslWrapper">
-    <!-- POSTER: imagen responsive — sirve 400w en móvil, 880w en desktop -->
-    <div class="vsl-poster" id="vslPoster">
-      <Image
-        src={posterImg}
-        alt="Workshop Volver a Estar Bien — Video VSL"
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-        class="vsl-poster-img"
-        widths={[400, 880]}
-        sizes="(max-width: 600px) 400px, 880px"
-        width={880}
-      />
-      <div class="vsl-loading-ring" id="vslSpinner" aria-hidden="true"></div>
-    </div>
+<!-- Wrapper ancla para calcular el scroll -->
+<div class="video-vsl-anchor" id="videoVslAnchor">
+  <div class="video-vsl-container" id="videoVslContainer">
+    <!-- Botón para cerrar PiP si está flotando -->
+    <button class="vsl-pip-close" id="vslPipClose" type="button" aria-label="Cerrar video flotante">
+      <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
 
-    <!-- IFRAME: Inyectado vía JS para autoplay diferido y Vimeo Embed -->
-    <div class="vsl-frame" id="vslFrame">
+    <!-- Contenedor responsive exacto de Vimeo (16:9) -->
+    <div class="vsl-responsive-wrap">
       <iframe
-        id={PLAYER_ID}
-        title="Video VSL Workshop Volver a Estar Bien con Yaner Rodríguez"
-        style="border:none;"
-        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+        id="vimeo-vsl-iframe"
+        src={IFRAME_SRC}
+        title="VSL Landing"
+        frameborder="0"
+        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
         allowfullscreen
-        width="100%"
-        height="100%"
+        class="vsl-iframe"
       ></iframe>
     </div>
   </div>
 </div>
 
-<script define:vars={{ PLAYER_ID, IFRAME_SRC }}>
+<script src="https://player.vimeo.com/api/player.js" is:inline></script>
+
+<script>
   (function () {
-    const poster = document.getElementById('vslPoster');
-    const frame  = document.getElementById('vslFrame');
-    const iframe = document.getElementById(PLAYER_ID);
     const container = document.getElementById('videoVslContainer');
-    let injected = false;
-    let isFloating = false;
+    const anchor = document.getElementById('videoVslAnchor');
+    const closeBtn = document.getElementById('vslPipClose');
+    let pipDismissed = false;
 
-    function injectVideo() {
-      if (injected || !iframe || iframe.src) return;
-      injected = true;
-      iframe.src = IFRAME_SRC;
-
-      iframe.addEventListener('load', () => {
-        if (poster) poster.classList.add('vsl-poster--hidden');
-        if (frame)  frame.removeAttribute('aria-hidden');
-        setTimeout(() => {
-          if (poster && poster.parentNode) poster.remove();
-        }, 500);
-
-        // Activar comportamiento Sticky / PiP al hacer scroll en desktop
-        if (window.innerWidth > 768) {
-          initScrollPiP();
-        }
-      }, { once: true });
+    if (closeBtn && container) {
+      closeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        pipDismissed = true;
+        container.classList.remove('vsl-floating-pip');
+      });
     }
 
-    function initScrollPiP() {
-      if (!('IntersectionObserver' in window) || !container) return;
-
+    if ('IntersectionObserver' in window && anchor && container) {
       const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          // Si el contenedor original sale de la pantalla hacia arriba
-          if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
-            if (!isFloating) {
-              container.classList.add('vsl-floating-pip');
-              isFloating = true;
-            }
-          } else if (entry.isIntersecting) {
-            if (isFloating) {
-              container.classList.remove('vsl-floating-pip');
-              isFloating = false;
-            }
+        if (pipDismissed) return;
+        const entry = entries[0];
+
+        // Cuando el video sale por completo por la parte superior
+        if (!entry.isIntersecting && entry.boundingClientRect.bottom < 0) {
+          if (window.innerWidth > 768) {
+            container.classList.add('vsl-floating-pip');
           }
-        });
+        } else if (entry.isIntersecting) {
+          container.classList.remove('vsl-floating-pip');
+        }
       }, {
-        threshold: 0.1
+        threshold: 0
       });
 
-      observer.observe(container);
-    }
-
-    // Inyectar video cuando el contenedor entra en el viewport
-    if ('IntersectionObserver' in window && container) {
-      const io = new IntersectionObserver((entries, obs) => {
-        if (entries[0].isIntersecting) {
-          injectVideo();
-          obs.disconnect();
-        }
-      }, { rootMargin: '200px' });
-      io.observe(container);
-    } else {
-      setTimeout(injectVideo, 800);
+      observer.observe(anchor);
     }
   })();
 </script>
 
 <style>
-  .video-vsl-container {
+  .video-vsl-anchor {
     position: relative;
     max-width: 880px;
     margin: 0 auto 30px;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+
+  .video-vsl-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
     border-radius: 0 0 16px 16px;
     overflow: hidden;
     box-shadow: 0 20px 50px -15px rgba(62, 29, 117, 0.4);
     background: #1f1b37;
-    transition: all 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
   }
 
-  .vsl-wrapper {
+  .vsl-responsive-wrap {
     position: relative;
     width: 100%;
-    padding-bottom: 56.25%; /* Fallback 16:9 compatible con iOS Safari */
-    height: 0;
-    overflow: hidden;
+    height: 100%;
   }
 
-  .vsl-poster {
+  .vsl-iframe {
     position: absolute;
-    inset: 0;
-    z-index: 2;
-    background: #1f1b37;
-    transition: opacity 0.4s ease, visibility 0.4s ease;
-  }
-
-  .vsl-poster--hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-  }
-
-  .vsl-poster-img {
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    display: block;
+    border: 0;
   }
 
-  .vsl-loading-ring {
+  /* Botón de cerrar PiP */
+  .vsl-pip-close {
+    display: none;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 48px;
-    height: 48px;
-    border: 4px solid rgba(255, 255, 255, 0.3);
-    border-top-color: #fff;
+    top: 8px;
+    right: 8px;
+    z-index: 30;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
-    animation: vsl-spin 0.8s linear infinite;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    transition: background 0.2s ease, transform 0.2s ease;
   }
 
-  @keyframes vsl-spin {
-    to { transform: translate(-50%, -50%) rotate(360deg); }
+  .vsl-pip-close:hover {
+    background: rgba(62, 29, 117, 0.95);
+    transform: scale(1.1);
   }
 
-  .vsl-frame {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    width: 100%;
-    height: 100%;
-  }
-
-  /* PiP Flotante inteligente al hacer scroll en desktop (reemplaza SDK de Panda) */
+  /* Estado flotante PiP */
   :global(.video-vsl-container.vsl-floating-pip) {
     position: fixed !important;
     bottom: 24px !important;
     right: 24px !important;
     width: 320px !important;
+    height: 180px !important;
+    aspect-ratio: 16 / 9 !important;
     max-width: 90vw !important;
     margin: 0 !important;
     z-index: 9999 !important;
     border-radius: 12px !important;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.2) !important;
     animation: vslSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  :global(.video-vsl-container.vsl-floating-pip .vsl-pip-close) {
+    display: flex !important;
   }
 
   @keyframes vslSlideIn {

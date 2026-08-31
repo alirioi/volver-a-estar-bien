@@ -1288,27 +1288,6 @@
     }
 
     /* ═══ Recursos visuales ═══ */
-    .video-vsl-container {
-        position: relative;
-        padding-bottom: 56.25%;
-        /* Relación de aspecto 16:9 */
-        height: 0;
-        overflow: hidden;
-        max-width: 100%;
-        border-radius: 0px 0px 12px 12px;
-        /* Opcional: Para mantener la estética del mockup anterior */
-        margin: 0 auto;
-    }
-
-    .video-vsl-container iframe,
-    .video-vsl-container object,
-    .video-vsl-container embed {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
 
     .video-notice-banner {
         background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
